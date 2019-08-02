@@ -10,7 +10,7 @@ use Firebase\JWT\JWT;
 
 class JwtEncodeCommand extends Command
 {
-    protected static $defaultName = 'encode';
+    protected static $defaultName = 'jwt:encode';
 
     /**
      * @return void
@@ -19,7 +19,6 @@ class JwtEncodeCommand extends Command
     {
         $this->setDescription('Encode payload')
             ->addArgument('payload', InputArgument::REQUIRED, 'Payload to encode')
-            ->addArgument('public', InputArgument::OPTIONAL, 'Public key path')
             ->addArgument('private', InputArgument::OPTIONAL, 'Private key path');
     }
 
@@ -32,19 +31,13 @@ class JwtEncodeCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $publicKeyPath = $input->getArgument('public') ?? '/home/mmarchwiany/.ssh/tiqets.pub';
-        $privateKeyPath = $input->getArgument('public') ?? '/home/mmarchwiany/.ssh/tiqets';
+        $privateKeyPath = $input->getArgument('private') ?? '/home/mmarchwiany/.ssh/tiqets';
         $payload = $input->getArgument('payload');
 
         $privateKey = file_get_contents($privateKeyPath);
-        $publicKey = file_get_contents($publicKeyPath);
 
         $encoded = JWT::encode($payload, $privateKey, 'RS256');
-        $decoded = JWT::decode($encoded, $publicKey, array('RS256'));
 
-        $output->writeln("\n<info>Encoded data:</info>");
         $output->writeln($encoded);
-        $output->writeln("\n<info>Decoded data:</info>");
-        $output->writeln($decoded);
     }
 }
