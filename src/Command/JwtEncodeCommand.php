@@ -31,12 +31,12 @@ class JwtEncodeCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $privateKeyPath = $input->getArgument('private') ?? '/home/mmarchwiany/.ssh/tiqets';
+        $privateKeyPath = $input->getArgument('private') ?? '~/.ssh/id_rsa';
         $payload = $input->getArgument('payload');
 
         $privateKey = file_get_contents($privateKeyPath);
 
-        $encoded = JWT::encode($payload, $privateKey, 'RS256');
+        $encoded = JWT::encode(json_decode($payload), $privateKey, 'RS256');
 
         $output->writeln($encoded);
     }

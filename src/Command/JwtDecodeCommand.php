@@ -31,13 +31,13 @@ class JwtDecodeCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $publicKeyPath = $input->getArgument('public') ?? '/home/mmarchwiany/.ssh/tiqets.pub';
+        $publicKeyPath = $input->getArgument('public') ?? '~/.ssh/id_rsa.pub';
         $payload = $input->getArgument('payload');
 
         $publicKey = file_get_contents($publicKeyPath);
 
         $decoded = JWT::decode($payload, $publicKey, array('RS256'));
 
-        $output->writeln($decoded);
+        $output->writeln(json_encode($decoded));
     }
 }
